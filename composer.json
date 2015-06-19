@@ -21,7 +21,7 @@
       ]
     },
     "require-dev": {
-        "zendframework/zend-servicemanager" : "",
+        "zendframework/zend-servicemanager": "~2.5",
         "fabpot/php-cs-fixer": "1.7.*",
         "phpunit/PHPUnit": "~4.0"
     },
