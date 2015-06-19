@@ -10,6 +10,9 @@
     "autoload": {
         "psr-4": {
             "Cityware\\Format\\": "src/"
+        },
+        "psr-0": {
+            "Cityware\\Format\\": "src/"
         }
     },
     "require": {
