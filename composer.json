@@ -1,12 +1,12 @@
 {
-    "name": "Cityware/city-format",
+    "name": "cityware/city-format",
     "description": " ",
     "license": "GPL-3.0",
     "keywords": [
         "cityware",
         "format"
     ],
-    "homepage": "https://github.com/Cityware/city-format",
+    "homepage": "https://github.com/cityware/city-format",
     "autoload": {
         "psr-4": {
             "Cityware\\Format\\": "src/"
