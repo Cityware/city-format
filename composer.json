@@ -6,19 +6,34 @@
         "cityware",
         "format"
     ],
+    "authors": [
+        {
+            "name": "Fabricio S V Xavier",
+            "email": "fabricio@cityware.com.br",
+            "homepage": "http://www.cityware.com.br",
+            "role": "Developer"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/cityware/city-format.git"
+        }
+    ],
     "homepage": "https://github.com/cityware/city-format",
     "autoload": {
         "psr-4": {
             "Cityware\\Format\\": "src/"
-        }
+        },
+        "psr-0": {
+            "Cityware\\Format\\": "src/"
+        },
+        "classmap": [
+            "src/"
+        ]
     },
     "require": {
         "php": ">=5.3.23"
-    },
-    "autoload": {
-      "classmap": [
-        "src/"
-      ]
     },
     "require-dev": {
         "zendframework/zend-servicemanager": "~2.5",
