@@ -14,7 +14,7 @@ namespace Cityware\Format;
  */
 final class FileFolder
 {
-    public static function filePermission($path)
+    public static function infoPermission($path)
     {
         $perms = fileperms($path);
 
