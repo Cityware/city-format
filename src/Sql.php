@@ -164,8 +164,9 @@ class Sql {
      * Stuff that only needs to be done once.  Builds regular expressions and sorts the reserved words.
      */
     protected static function init() {
-        if (self::$init)
+        if (self::$init) {
             return;
+        }
 
         // Sort reserved word list from longest word to shortest, 3x faster than usort
         $reservedMap = array_combine(self::$reserved, array_map('strlen', self::$reserved));
@@ -173,12 +174,12 @@ class Sql {
         self::$reserved = array_keys($reservedMap);
 
         // Set up regular expressions
-        self::$regex_boundaries = '(' . implode('|', array_map(array(__CLASS__, 'quote_regex'), self::$boundaries)) . ')';
-        self::$regex_reserved = '(' . implode('|', array_map(array(__CLASS__, 'quote_regex'), self::$reserved)) . ')';
-        self::$regex_reserved_toplevel = str_replace(' ', '\\s+', '(' . implode('|', array_map(array(__CLASS__, 'quote_regex'), self::$reserved_toplevel)) . ')');
-        self::$regex_reserved_newline = str_replace(' ', '\\s+', '(' . implode('|', array_map(array(__CLASS__, 'quote_regex'), self::$reserved_newline)) . ')');
+        self::$regex_boundaries = '(' . implode('|', array_map(array(__CLASS__, 'quoteRegex'), self::$boundaries)) . ')';
+        self::$regex_reserved = '(' . implode('|', array_map(array(__CLASS__, 'quoteRegex'), self::$reserved)) . ')';
+        self::$regex_reserved_toplevel = str_replace(' ', '\\s+', '(' . implode('|', array_map(array(__CLASS__, 'quoteRegex'), self::$reserved_toplevel)) . ')');
+        self::$regex_reserved_newline = str_replace(' ', '\\s+', '(' . implode('|', array_map(array(__CLASS__, 'quoteRegex'), self::$reserved_newline)) . ')');
 
-        self::$regex_function = '(' . implode('|', array_map(array(__CLASS__, 'quote_regex'), self::$functions)) . ')';
+        self::$regex_function = '(' . implode('|', array_map(array(__CLASS__, 'quoteRegex'), self::$functions)) . ')';
 
         self::$init = true;
     }
@@ -194,6 +195,7 @@ class Sql {
      */
     protected static function getNextToken($string, $previous = null) {
         // Whitespace
+        $matches = null;
         if (preg_match('/^\s+/', $string, $matches)) {
             return array(
                 self::TOKEN_VALUE => $matches[0],
@@ -251,8 +253,9 @@ class Sql {
                 }
             }
 
-            if ($ret[self::TOKEN_VALUE] !== null)
+            if ($ret[self::TOKEN_VALUE] !== null) {
                 return $ret;
+            }
         }
 
         // Number (decimal, binary, or hex)
@@ -319,7 +322,7 @@ class Sql {
     }
 
     protected static function getQuotedString($string) {
-        $ret = null;
+        $matches = $ret = null;
 
         // This checks for the following patterns:
         // 1. backtick quoted string using `` to escape
@@ -347,14 +350,12 @@ class Sql {
         $tokens = array();
 
         // Used for debugging if there is an error while tokenizing the string
-        $original_length = strlen($string);
+        $current_length = strlen($string);
 
         // Used to make sure the string keeps shrinking on each iteration
         $old_string_len = strlen($string) + 1;
 
         $token = null;
-
-        $current_length = strlen($string);
 
         // Keep processing the string until it is empty
         while ($current_length) {
@@ -522,8 +523,9 @@ class Sql {
                 $length = 0;
                 for ($j = 1; $j <= 250; $j++) {
                     // Reached end of string
-                    if (!isset($tokens[$i + $j]))
+                    if (!isset($tokens[$i + $j])) {
                         break;
+                    }
 
                     $next = $tokens[$i + $j];
 
@@ -786,9 +788,9 @@ class Sql {
 
             $result .= $token[self::TOKEN_VALUE];
         }
-        $result = self::format($result, false);
+        //$result = self::format($result, false);
 
-        return $result;
+        return self::format($result, false);
     }
 
     /**
@@ -843,7 +845,7 @@ class Sql {
     protected static function highlightToken($token) {
         $type = $token[self::TOKEN_TYPE];
 
-        if (self::is_cli()) {
+        if (self::isCli()) {
             $token = $token[self::TOKEN_VALUE];
         } else {
             if (defined('ENT_IGNORE')) {
@@ -886,7 +888,7 @@ class Sql {
      * @return String HTML code of the highlighted token.
      */
     protected static function highlightQuote($value) {
-        if (self::is_cli()) {
+        if (self::isCli()) {
             return self::$cli_quote . $value . "\x1b[0m";
         } else {
             return '<span ' . self::$quote_attributes . '>' . $value . '</span>';
@@ -901,7 +903,7 @@ class Sql {
      * @return String HTML code of the highlighted token.
      */
     protected static function highlightBacktickQuote($value) {
-        if (self::is_cli()) {
+        if (self::isCli()) {
             return self::$cli_backtick_quote . $value . "\x1b[0m";
         } else {
             return '<span ' . self::$backtick_quote_attributes . '>' . $value . '</span>';
@@ -916,7 +918,7 @@ class Sql {
      * @return String HTML code of the highlighted token.
      */
     protected static function highlightReservedWord($value) {
-        if (self::is_cli()) {
+        if (self::isCli()) {
             return self::$cli_reserved . $value . "\x1b[0m";
         } else {
             return '<span ' . self::$reserved_attributes . '>' . $value . '</span>';
@@ -931,10 +933,11 @@ class Sql {
      * @return String HTML code of the highlighted token.
      */
     protected static function highlightBoundary($value) {
-        if ($value === '(' || $value === ')')
+        if ($value === '(' || $value === ')') {
             return $value;
+        }
 
-        if (self::is_cli()) {
+        if (self::isCli()) {
             return self::$cli_boundary . $value . "\x1b[0m";
         } else {
             return '<span ' . self::$boundary_attributes . '>' . $value . '</span>';
@@ -949,7 +952,7 @@ class Sql {
      * @return String HTML code of the highlighted token.
      */
     protected static function highlightNumber($value) {
-        if (self::is_cli()) {
+        if (self::isCli()) {
             return self::$cli_number . $value . "\x1b[0m";
         } else {
             return '<span ' . self::$number_attributes . '>' . $value . '</span>';
@@ -964,7 +967,7 @@ class Sql {
      * @return String HTML code of the highlighted token.
      */
     protected static function highlightError($value) {
-        if (self::is_cli()) {
+        if (self::isCli()) {
             return self::$cli_error . $value . "\x1b[0m";
         } else {
             return '<span ' . self::$error_attributes . '>' . $value . '</span>';
@@ -979,7 +982,7 @@ class Sql {
      * @return String HTML code of the highlighted token.
      */
     protected static function highlightComment($value) {
-        if (self::is_cli()) {
+        if (self::isCli()) {
             return self::$cli_comment . $value . "\x1b[0m";
         } else {
             return '<span ' . self::$comment_attributes . '>' . $value . '</span>';
@@ -994,7 +997,7 @@ class Sql {
      * @return String HTML code of the highlighted token.
      */
     protected static function highlightWord($value) {
-        if (self::is_cli()) {
+        if (self::isCli()) {
             return self::$cli_word . $value . "\x1b[0m";
         } else {
             return '<span ' . self::$word_attributes . '>' . $value . '</span>';
@@ -1009,7 +1012,7 @@ class Sql {
      * @return String HTML code of the highlighted token.
      */
     protected static function highlightVariable($value) {
-        if (self::is_cli()) {
+        if (self::isCli()) {
             return self::$cli_variable . $value . "\x1b[0m";
         } else {
             return '<span ' . self::$variable_attributes . '>' . $value . '</span>';
@@ -1023,7 +1026,7 @@ class Sql {
      *
      * @return String The quoted string
      */
-    private static function quote_regex($a) {
+    private static function quoteRegex($a) {
         return preg_quote($a, '/');
     }
 
@@ -1035,7 +1038,7 @@ class Sql {
      * @return String The quoted string
      */
     private static function output($string) {
-        if (self::is_cli()) {
+        if (self::isCli()) {
             return $string . "\n";
         } else {
             $string = trim($string);
@@ -1047,11 +1050,12 @@ class Sql {
         }
     }
 
-    private static function is_cli() {
-        if (isset(self::$cli))
+    private static function isCli() {
+        if (isset(self::$cli)) {
             return self::$cli;
-        else
+        } else {
             return php_sapi_name() === 'cli';
+        }
     }
 
 }
