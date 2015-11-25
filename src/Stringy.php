@@ -305,21 +305,28 @@ class Stringy implements \IteratorAggregate {
     public function toAscii() {
         $stringy = self::create($this->str, $this->encoding);
         $charsArray = array(
-            'a' => array('à', 'á', 'â', 'ã', 'ā', 'ą', 'ă', 'å', 'α', 'ά', 'ἀ','ἁ', 'ἂ', 'ἃ', 'ἄ', 'ἅ', 'ἆ', 'ἇ', 'ᾀ', 'ᾁ', 'ᾂ', 'ᾃ','ᾄ', 'ᾅ', 'ᾆ', 'ᾇ', 'ὰ', 'ά', 'ᾰ', 'ᾱ', 'ᾲ', 'ᾳ', 'ᾴ','ᾶ', 'ᾷ', 'а', 'ъ'),
+            'a' => array('à', 'á', 'â', 'ã', 'ā', 'ą', 'ă', 'å', 'α', 'ά', 'ἀ',
+                'ἁ', 'ἂ', 'ἃ', 'ἄ', 'ἅ', 'ἆ', 'ἇ', 'ᾀ', 'ᾁ', 'ᾂ', 'ᾃ',
+                'ᾄ', 'ᾅ', 'ᾆ', 'ᾇ', 'ὰ', 'ά', 'ᾰ', 'ᾱ', 'ᾲ', 'ᾳ', 'ᾴ',
+                'ᾶ', 'ᾷ', 'а', 'ъ'),
             'b' => array('б', 'β'),
             'c' => array('ç', 'ć', 'č', 'ĉ', 'ċ'),
             'd' => array('ď', 'ð', 'đ', 'ƌ', 'ȡ', 'ɖ', 'ɗ', 'ᵭ', 'ᶁ', 'ᶑ', 'д'),
-            'e' => array('è', 'é', 'ê', 'ë', 'ē', 'ę', 'ě', 'ĕ', 'ė', 'ε', 'έ','ἐ', 'ἑ', 'ἒ', 'ἓ', 'ἔ', 'ἕ', 'ὲ', 'έ', 'е', 'ё', 'э', 'є'),
+            'e' => array('è', 'é', 'ê', 'ë', 'ē', 'ę', 'ě', 'ĕ', 'ė', 'ε', 'έ',
+                'ἐ', 'ἑ', 'ἒ', 'ἓ', 'ἔ', 'ἕ', 'ὲ', 'έ', 'е', 'ё', 'э', 'є'),
             'f' => array('ф'),
             'g' => array('ĝ', 'ğ', 'ġ', 'ģ', 'г', 'ґ'),
             'h' => array('ĥ', 'ħ'),
-            'i' => array('ì', 'í', 'î', 'ï', 'ī', 'ĩ', 'ĭ', 'į', 'ı', 'ι', 'ί','ϊ', 'ΐ', 'ἰ', 'ἱ', 'ἲ', 'ἳ', 'ἴ', 'ἵ', 'ἶ', 'ἷ', 'ὶ','ί', 'ῐ', 'ῑ', 'ῒ', 'ΐ', 'ῖ', 'ῗ', 'і', 'ї', 'и'),
+            'i' => array('ì', 'í', 'î', 'ï', 'ī', 'ĩ', 'ĭ', 'į', 'ı', 'ι', 'ί',
+                'ϊ', 'ΐ', 'ἰ', 'ἱ', 'ἲ', 'ἳ', 'ἴ', 'ἵ', 'ἶ', 'ἷ', 'ὶ',
+                'ί', 'ῐ', 'ῑ', 'ῒ', 'ΐ', 'ῖ', 'ῗ', 'і', 'ї', 'и'),
             'j' => array('ĵ'),
             'k' => array('ķ', 'ĸ', 'к'),
             'l' => array('ł', 'ľ', 'ĺ', 'ļ', 'ŀ', 'л'),
             'm' => array('м'),
             'n' => array('ñ', 'ń', 'ň', 'ņ', 'ŉ', 'ŋ', 'ν', 'н'),
-            'o' => array('ò', 'ó', 'ô', 'õ', 'ø', 'ō', 'ő', 'ŏ', 'ο', 'ό', 'ὀ','ὁ', 'ὂ', 'ὃ', 'ὄ', 'ὅ', 'ὸ', 'ό', 'ö', 'о'),
+            'o' => array('ò', 'ó', 'ô', 'õ', 'ø', 'ō', 'ő', 'ŏ', 'ο', 'ό', 'ὀ',
+                'ὁ', 'ὂ', 'ὃ', 'ὄ', 'ὅ', 'ὸ', 'ό', 'ö', 'о'),
             'p' => array('п'),
             'r' => array('ŕ', 'ř', 'ŗ', 'р'),
             's' => array('ś', 'š', 'ş', 'с'),
@@ -338,19 +345,25 @@ class Stringy implements \IteratorAggregate {
             'ya' => array('я'),
             'yu' => array('ю'),
             'zh' => array('ж'),
-            'A' => array('Á', 'Â', 'Ã', 'Å', 'Ā', 'Ą', 'Ă', 'Α', 'Ά', 'Ἀ', 'Ἁ','Ἂ', 'Ἃ', 'Ἄ', 'Ἅ', 'Ἆ', 'Ἇ', 'ᾈ', 'ᾉ', 'ᾊ', 'ᾋ', 'ᾌ','ᾍ', 'ᾎ', 'ᾏ', 'Ᾰ', 'Ᾱ', 'Ὰ', 'Ά', 'ᾼ', 'А', 'Ъ'),
+            'A' => array('Á', 'Â', 'Ã', 'Å', 'Ā', 'Ą', 'Ă', 'Α', 'Ά', 'Ἀ', 'Ἁ',
+                'Ἂ', 'Ἃ', 'Ἄ', 'Ἅ', 'Ἆ', 'Ἇ', 'ᾈ', 'ᾉ', 'ᾊ', 'ᾋ', 'ᾌ',
+                'ᾍ', 'ᾎ', 'ᾏ', 'Ᾰ', 'Ᾱ', 'Ὰ', 'Ά', 'ᾼ', 'А', 'Ъ'),
             'B' => array('Б'),
             'C' => array('Ć', 'Č', 'Ĉ', 'Ċ'),
             'D' => array('Ď', 'Ð', 'Đ', 'Ɖ', 'Ɗ', 'Ƌ', 'ᴅ', 'ᴆ', 'Д'),
-            'E' => array('É', 'Ê', 'Ë', 'Ē', 'Ę', 'Ě', 'Ĕ', 'Ė', 'Ε', 'Έ', 'Ἐ','Ἑ', 'Ἒ', 'Ἓ', 'Ἔ', 'Ἕ', 'Έ', 'Ὲ', 'Е', 'Ё', 'Э', 'Є'),
+            'E' => array('É', 'Ê', 'Ë', 'Ē', 'Ę', 'Ě', 'Ĕ', 'Ė', 'Ε', 'Έ', 'Ἐ',
+                'Ἑ', 'Ἒ', 'Ἓ', 'Ἔ', 'Ἕ', 'Έ', 'Ὲ', 'Е', 'Ё', 'Э', 'Є'),
             'F' => array('Ф'),
             'G' => array('Ğ', 'Ġ', 'Ģ', 'Г', 'Ґ'),
-            'I' => array('Í', 'Î', 'Ï', 'Ī', 'Ĩ', 'Ĭ', 'Į', 'İ', 'Ι', 'Ί', 'Ϊ','Ἰ', 'Ἱ', 'Ἳ', 'Ἴ', 'Ἵ', 'Ἶ', 'Ἷ', 'Ῐ', 'Ῑ', 'Ὶ', 'Ί','И', 'І', 'Ї'),
+            'I' => array('Í', 'Î', 'Ï', 'Ī', 'Ĩ', 'Ĭ', 'Į', 'İ', 'Ι', 'Ί', 'Ϊ',
+                'Ἰ', 'Ἱ', 'Ἳ', 'Ἴ', 'Ἵ', 'Ἶ', 'Ἷ', 'Ῐ', 'Ῑ', 'Ὶ', 'Ί',
+                'И', 'І', 'Ї'),
             'K' => array('К'),
             'L' => array('Ĺ', 'Ł', 'Л'),
             'M' => array('М'),
             'N' => array('Ń', 'Ñ', 'Ň', 'Ņ', 'Ŋ', 'Н'),
-            'O' => array('Ó', 'Ô', 'Õ', 'Ø', 'Ō', 'Ő', 'Ŏ', 'Ο', 'Ό', 'Ὀ', 'Ὁ','Ὂ', 'Ὃ', 'Ὄ', 'Ὅ', 'Ὸ', 'Ό', 'О'),
+            'O' => array('Ó', 'Ô', 'Õ', 'Ø', 'Ō', 'Ő', 'Ŏ', 'Ο', 'Ό', 'Ὀ', 'Ὁ',
+                'Ὂ', 'Ὃ', 'Ὄ', 'Ὅ', 'Ὸ', 'Ό', 'О'),
             'P' => array('П'),
             'R' => array('Ř', 'Ŕ', 'Р'),
             'S' => array('Ş', 'Ŝ', 'Ș', 'Š', 'Ś', 'С'),
@@ -400,9 +413,8 @@ class Stringy implements \IteratorAggregate {
         $strLength = $stringy->length();
         $padStrLength = mb_strlen($padStr, $stringy->encoding);
 
-        if ($length <= $strLength || $padStrLength <= 0){
+        if ($length <= $strLength || $padStrLength <= 0)
             return $stringy;
-        }
 
         // Number of times to repeat the padStr if left or right
         $times = ceil(($length - $strLength) / $padStrLength);
@@ -602,11 +614,10 @@ class Stringy implements \IteratorAggregate {
      * @return bool   Whether or not $str contains $needle
      */
     public function contains($needle, $caseSensitive = true) {
-        if ($caseSensitive){
+        if ($caseSensitive)
             return (mb_strpos($this->str, $needle, 0, $this->encoding) !== false);
-        }else{
+        else
             return (mb_stripos($this->str, $needle, 0, $this->encoding) !== false);
-        }
     }
 
     /**
@@ -631,9 +642,8 @@ class Stringy implements \IteratorAggregate {
      */
     public function insert($substring, $index) {
         $stringy = self::create($this->str, $this->encoding);
-        if ($index > $stringy->length()){
+        if ($index > $stringy->length())
             return $stringy;
-        }
 
         $start = mb_substr($stringy->str, 0, $index, $stringy->encoding);
         $end = mb_substr($stringy->str, $index, $stringy->length(), $stringy->encoding);
@@ -654,9 +664,8 @@ class Stringy implements \IteratorAggregate {
      */
     public function truncate($length, $substring = '') {
         $stringy = self::create($this->str, $this->encoding);
-        if ($length >= $stringy->length()){
+        if ($length >= $stringy->length())
             return $stringy;
-        }
 
         // Need to further trim the string so we can append the substring
         $substringLength = mb_strlen($substring, $stringy->encoding);
@@ -680,9 +689,8 @@ class Stringy implements \IteratorAggregate {
      */
     public function safeTruncate($length, $substring = '') {
         $stringy = self::create($this->str, $this->encoding);
-        if ($length >= $stringy->length()){
+        if ($length >= $stringy->length())
             return $stringy;
-        }
 
         // Need to further trim the string so we can append the substring
         $substringLength = mb_strlen($substring, $stringy->encoding);
@@ -925,9 +933,8 @@ class Stringy implements \IteratorAggregate {
     public function ensureLeft($substring) {
         $stringy = self::create($this->str, $this->encoding);
 
-        if (!$stringy->startsWith($substring)){
+        if (!$stringy->startsWith($substring))
             $stringy->str = $substring . $stringy->str;
-        }
 
         return $stringy;
     }
@@ -942,9 +949,8 @@ class Stringy implements \IteratorAggregate {
     public function ensureRight($substring) {
         $stringy = self::create($this->str, $this->encoding);
 
-        if (!$stringy->endsWith($substring)){
+        if (!$stringy->endsWith($substring))
             $stringy->str .= $substring;
-        }
 
         return $stringy;
     }
@@ -1139,5 +1145,4 @@ class Stringy implements \IteratorAggregate {
 
         return self::create($str, $this->encoding);
     }
-
 }

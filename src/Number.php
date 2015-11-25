@@ -53,7 +53,7 @@ class Number {
         $valDecimal = new \NumberFormatter($language, \NumberFormatter::DECIMAL);
         $valDecimal->setAttribute(\NumberFormatter::MIN_FRACTION_DIGITS, $precision);
         $valDecimal->setAttribute(\NumberFormatter::MAX_FRACTION_DIGITS, $precision);
-        return $valDecimal->format((float) $value, \NumberFormatter::DECIMAL);
+        return $valDecimal->format((float) $value, \NumberFormatter::TYPE_DOUBLE);
     }
 
 }

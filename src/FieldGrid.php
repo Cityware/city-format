@@ -12,17 +12,16 @@ namespace Cityware\Format;
  *
  * @author Fabricio
  */
-final class FieldGrid
-{
+final class FieldGrid {
+
     /**
      * Função de mascara de valores
-      * @param mixed $valor
+     * @param mixed $valor
      * @param  string $tipo
      * @param  string $formato
      * @return mixed
      */
-    public static function fieldGridMask($valor, $tipo = null, $formato = null)
-    {
+    public static function fieldGridMask($valor, $tipo = null, $formato = null) {
         $data = null;
         $retorno = $valor;
         switch (strtoupper($tipo)) {
@@ -92,8 +91,7 @@ final class FieldGrid
      * @param  string $formato
      * @return mixed
      */
-    public static function fieldMask($valor, $tipo = null, $formato = null)
-    {
+    public static function fieldMask($valor, $tipo = null, $formato = null) {
         $data = null;
         $retorno = $valor;
         switch (strtoupper($tipo)) {
@@ -134,6 +132,11 @@ final class FieldGrid
                 }
             case "STATUS": {
                     $arrayMap = Array('I' => 'Excluido', 'L' => 'Lixeira', 'B' => 'Bloqueado', 'A' => 'Ativo');
+                    $retorno = $arrayMap[$valor];
+                    break;
+                }
+            case "BOOLEAN": {
+                    $arrayMap = Array('S' => 'Sim', 'N' => 'Não');
                     $retorno = $arrayMap[$valor];
                     break;
                 }
