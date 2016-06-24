@@ -29,7 +29,7 @@ final class Arrays {
         }
 
         foreach ($arrObj as $key => $val) {
-            $val = (is_array($val) || is_object($val)) ? $this->getArrayObjectToArray($val) : $val;
+            $val = (is_array($val) || is_object($val)) ? self::getObjectToArray($val) : $val;
             $array[$key] = $val;
         }
         return $array;
