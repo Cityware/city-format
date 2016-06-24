@@ -691,10 +691,11 @@ final class Arrays {
             $data = (array) $data;
         }
         // Recurse into arrays
-        if (is_array($data))
+        if (is_array($data)){
             foreach ($data as &$item) {
                 $item = self::fromXml($item, $callback, TRUE);
             }
+        }
         // Run callback and return
         return (!is_array($data) && is_callable($callback) ) ? call_user_func($callback, $data) : $data;
     }
@@ -715,7 +716,7 @@ final class Arrays {
      * will be present in key and values
      *
      * @static
-     * @throws ErrException
+     * @throws Exception
      *
      * @param array  $array
      * @param string $format
@@ -727,11 +728,13 @@ final class Arrays {
      * @return array
      */
     public static function makeHierarchy(array $array, $format, $keepKey = false) {
+        
+        $matches = null;
         preg_match('#([^=\[]+)((?:\[(?:[^\]]*)\])*)=>(.+)#', $format, $matches);
         try {
             list(, $key, $braces, $columns ) = $matches;
-        } catch (Exception $e) {
-            throw new ErrException('Invalid format pattern', get_defined_vars());
+        } catch (\Exception $e) {
+            throw new \Exception('Invalid format pattern' . get_defined_vars());
         }
         if ($braces) {
             preg_match_all('#\[([^\]]*)\]#', $braces, $matches);
@@ -836,7 +839,7 @@ final class Arrays {
      * @param   array $a2 array to merge, accepts any number of arrays
      *
      * @return  array
-     */
+     */ 
     public static function merge(array $a1, array $a2) {
         $result = array();
         for ($i = 0, $total = func_num_args(); $i < $total; $i++) {
