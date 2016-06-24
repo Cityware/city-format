@@ -15,8 +15,13 @@ namespace Cityware\Format;
  */
 final class Arrays {
 
+    /**
+     * Convert Object Var to Array in Recursive mode
+     * @param Object $obj
+     * @return array
+     */
     public static function getObjectToArray($obj) {
-        $array = array(); // noisy $array does not exist
+        $array = array();
 
         if (is_array($obj)) {
             $arrObj = $obj;
