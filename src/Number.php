@@ -60,33 +60,47 @@ class Number {
      * Formatação de numero em bytes para o formato de tamanho
      * @param int $bytes
      * @param string $unit
-     * @param int $decimals
+     * @param int $precision
      * @return string
      */
-    public static function byteFormat($bytes, $unit = "", $decimals = 2) {
+    public static function byteFormat($bytes, $unit = "B", $precision = 2) {
+        $kilobyte = 1024;
+        $megabyte = $kilobyte * 1024;
+        $gigabyte = $megabyte * 1024;
+        $terabyte = $gigabyte * 1024;
+        $petabyte = $terabyte * 1024;
+        $exabyte = $petabyte * 1024;
+        $zettabyte = $exabyte * 1024;
+        $yottabyte = $zettabyte * 1024;
+
         $units = array('B' => 0, 'KB' => 1, 'MB' => 2, 'GB' => 3, 'TB' => 4, 'PB' => 5, 'EB' => 6, 'ZB' => 7, 'YB' => 8);
 
-        $value = 0;
-        if ($bytes > 0) {
-            // Generate automatic prefix by bytes 
-            // If wrong prefix given
-            if (!array_key_exists($unit, $units)) {
-                $pow = floor(log($bytes) / log(1024));
-                $unit = array_search($pow, $units);
-            }
-
-            // Calculate byte value by prefix
-            $value = ($bytes / pow(1024, floor($units[$unit])));
+        if ($unit != 'B') {
+            $value = ($bytes * pow(1024, floor($units[$unit])));
         }
 
-        // If decimals is not numeric or decimals is less than 0 
-        // then set default value
-        if (!is_numeric($decimals) || $decimals < 0) {
-            $decimals = 2;
-        }
 
-        // Format output
-        return sprintf('%.' . $decimals . 'f ' . $unit, $value);
+        if (($value >= 0) && ($value < $kilobyte)) {
+            return $value . ' B';
+        } elseif (($value >= $kilobyte) && ($value < $megabyte)) {
+            return round($value / $kilobyte, $precision) . ' KB';
+        } elseif (($value >= $megabyte) && ($value < $gigabyte)) {
+            return round($value / $megabyte, $precision) . ' MB';
+        } elseif (($value >= $gigabyte) && ($value < $terabyte)) {
+            return round($value / $gigabyte, $precision) . ' GB';
+        } elseif ($value >= $terabyte) {
+            return round($value / $terabyte, $precision) . ' TB';
+        } elseif ($value >= $petabyte) {
+            return round($value / $petabyte, $precision) . ' PB';
+        } elseif ($value >= $exabyte) {
+            return round($value / $exabyte, $precision) . ' EB';
+        } elseif ($value >= $zettabyte) {
+            return round($value / $zettabyte, $precision) . ' ZB';
+        } elseif ($value >= $yottabyte) {
+            return round($value / $yottabyte, $precision) . ' YB';
+        } else {
+            return $value . ' B';
+        }
     }
 
 }
