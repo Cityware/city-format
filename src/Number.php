@@ -77,6 +77,8 @@ class Number {
 
         if ($unit != 'B') {
             $value = ($bytes * pow(1024, floor($units[$unit])));
+        } else {
+            $value = $bytes;
         }
 
 
