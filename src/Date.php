@@ -119,8 +119,8 @@ final class Date {
                     }
                 } elseif (preg_match('/^([0-9]{1,2})[-,\/]([0-9]{1,2})[-,\/]([0-9]{4})/', $value, $date)) {
                     $datetime = explode(' ', $value);
-                    
-                    
+
+
                     if (is_array($datetime) and count($datetime) > 1) {
                         $temp[$key] = date($varFormat, strtotime($date[3] . '-' . $date[2] . '-' . $date[1])) . ' ' . $datetime[1];
                     } else {
@@ -133,30 +133,43 @@ final class Date {
     }
 
     /**
-     * Função de conversão de segundos para Array(Hora, Minuto, Segundo)
-     * @param  integer $seconds
+     * Função de conversão de segundos para Array(Anoa, Meses, Dias, Horas, Minutos, Segundos)
+     * @param  integer $inputSeconds
      * @return array
      */
-    public static function secondsToTime($seconds) {
-        // extract hours
-        $hours = floor($seconds / (60 * 60));
+    public static function secondsToTime($inputSeconds) {
+        $secondsInAMinute = 60;
+        $secondsInAnHour = 60 * $secondsInAMinute;
+        $secondsInADay = 24 * $secondsInAnHour;
+        $secondsInAMonth = 30 * $secondsInADay;
+        $secondsInAYear = 12 * $secondsInAMonth;
 
-        // extract minutes
-        $divisor_for_minutes = $seconds % (60 * 60);
-        $minutes = floor($divisor_for_minutes / 60);
+        $years = floor($inputSeconds / $secondsInAYear);
 
-        // extract the remaining seconds
-        $divisor_for_seconds = $divisor_for_minutes % 60;
-        $seconds = ceil($divisor_for_seconds);
+        $monthSeconds = $inputSeconds % $secondsInAYear;
+        $months = floor($monthSeconds / $secondsInAMonth);
 
-        // return the final array
-        $arrayReturn = array(
-            "h" => (int) $hours,
-            "m" => (int) $minutes,
-            "s" => (int) $seconds,
+        $daySeconds = $monthSeconds % $secondsInAMonth;
+        $days = floor($daySeconds / $secondsInADay);
+
+        $hourSeconds = $daySeconds % $secondsInADay;
+        $hours = floor($hourSeconds / $secondsInAnHour);
+
+        $minuteSeconds = $hourSeconds % $secondsInAnHour;
+        $minutes = floor($minuteSeconds / $secondsInAMinute);
+
+        $remainingSeconds = $minuteSeconds % $secondsInAMinute;
+        $seconds = ceil($remainingSeconds);
+
+        $aReturn = array(
+            'y' => (int) $years,
+            'm' => (int) $months,
+            'd' => (int) $days,
+            'h' => (int) $hours,
+            'i' => (int) $minutes,
+            's' => (int) $seconds
         );
-
-        return $arrayReturn;
+        return $aReturn;
     }
 
     /**
@@ -413,7 +426,7 @@ final class Date {
 
         return $mes;
     }
-    
+
     /**
      * Retorna o mês por extenso em formato reduzido
      * @param  integer $month
