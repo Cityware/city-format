@@ -81,7 +81,6 @@ class Number {
             $value = $bytes;
         }
 
-
         if (($value >= 0) && ($value < $kilobyte)) {
             return $value . ' B';
         } elseif (($value >= $kilobyte) && ($value < $megabyte)) {
