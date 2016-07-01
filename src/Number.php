@@ -103,5 +103,67 @@ class Number {
             return $value . ' B';
         }
     }
+    
+    /**
+     * COnverte numero de definição de tamanho computacional
+     * @param integer $bytes
+     * @param string $unitSource
+     * @param string $unitDest
+     * @param integer $precision
+     * @return double
+     */
+    public static function convertByteFormat($bytes, $unitSource = "B", $unitDest = "KB", $precision = 2) {
+        $kilobyte = 1024;
+        $megabyte = $kilobyte * 1024;
+        $gigabyte = $megabyte * 1024;
+        $terabyte = $gigabyte * 1024;
+        $petabyte = $terabyte * 1024;
+        $exabyte = $petabyte * 1024;
+        $zettabyte = $exabyte * 1024;
+        $yottabyte = $zettabyte * 1024;
+
+        $units = array('B' => 0, 'KB' => 1, 'MB' => 2, 'GB' => 3, 'TB' => 4, 'PB' => 5, 'EB' => 6, 'ZB' => 7, 'YB' => 8);
+
+        if ($unitSource != 'B') {
+            $value = ($bytes * pow(1024, floor($units[$unitSource])));
+        } else {
+            $value = $bytes;
+        }
+        
+        switch ($unitDest) {
+            case 'B':
+                $return = $value;
+                break;
+            case 'KB':
+                $return = round($value / $kilobyte, $precision);
+                break;
+            case 'MB':
+                $return = round($value / $megabyte, $precision);
+                break;
+            case 'GB':
+                $return = round($value / $gigabyte, $precision);
+                break;
+            case 'TB':
+                $return = round($value / $terabyte, $precision);
+                break;
+            case 'PB':
+                $return = round($value / $petabyte, $precision);
+                break;
+            case 'EB':
+                $return = round($value / $exabyte, $precision);
+                break;
+            case 'ZB':
+                $return = round($value / $zettabyte, $precision);
+                break;
+            case 'YB':
+                $return = round($value / $yottabyte, $precision);
+                break;
+            default:
+                $return = $value;
+                break;
+        }
+
+        return $return;
+    }
 
 }
