@@ -107,6 +107,15 @@ class DateOperations {
             case 'y':
                 $typeSum = 'year';
                 break;
+            case 'h':
+                $typeSum = 'hour';
+                break;
+            case 'i':
+                $typeSum = 'minute';
+                break;
+            case 's':
+                $typeSum = 'second';
+                break;
         }
         return $typeSum;
     }
@@ -114,7 +123,7 @@ class DateOperations {
     /**
      * Função de soma com datas
      * @param integer $num Número que será adicionado
-     * @param string $type Tipo de adição (Dia = d, Mês = m, Ano = y)
+     * @param string $type Tipo de adição (Dia = d, Mês = m, Ano = y, H = Hora, I = Minuto, S = Segundo)
      * @return \Cityware\Format\DateOperations
      */
     public function sum($num, $type = 'd') {
@@ -127,7 +136,7 @@ class DateOperations {
     /**
      * Função de subtração com datas
      * @param integer $num Número que será adicionado
-     * @param string $type Tipo de adição (Dia = d, Mês = m, Ano = y)
+     * @param string $type Tipo de adição (Dia = d, Mês = m, Ano = y, H = Hora, I = Minuto, S = Segundo)
      * @return \Cityware\Format\DateOperations
      */
     public function sub($num, $type = 'd') {
