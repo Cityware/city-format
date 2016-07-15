@@ -9,7 +9,7 @@ namespace Cityware\Format;
  */
 class DateOperations {
 
-    private $dateTime = null, $dateTimeDiff = null;
+    private $dateTime = null, $dateTimeDiff = null, $dateTimeInterval = null;
 
     public function __construct() {
         //$this->dateTime = new \DateTime();
@@ -26,11 +26,31 @@ class DateOperations {
         $formatedDate =  date('Y-m-d', strtotime($dateTemp));
         list($year, $month, $day) = explode("-", $formatedDate);
         if($diff){
+            $this->dateTimeDiff = null;
             $this->dateTimeDiff = new \DateTime();
             $this->dateTimeDiff->setDate($year, $month, $day);
         } else {
+            $this->dateTime = null;
             $this->dateTime = new \DateTime();
             $this->dateTime->setDate($year, $month, $day);
+        }
+        return $this;
+    }
+    
+    /**
+     * Função de envio de data baseado em string no formado Y-m-d
+     * @param string $date
+     * @return \Cityware\Format\DateOperations
+     */
+    public function setDateTime($date, $diff = false) {
+        $dateTemp = str_replace('/', '-', $date);
+        $formatedDate =  date('Y-m-d H:i:s', strtotime($dateTemp));
+        if($diff){
+            $this->dateTimeDiff = null;
+            $this->dateTimeDiff = new \DateTime($formatedDate);
+        } else {
+            $this->dateTime = null;
+            $this->dateTime = new \DateTime($formatedDate);
         }
         return $this;
     }
@@ -157,6 +177,29 @@ class DateOperations {
         }
         $interval = (array) $this->dateTime->diff($this->dateTimeDiff);
         return $interval['days'];
+    }
+    
+    
+    /**
+     * Função de calculo de diferença entre datas
+     * @param string $dateTime Data baseado em string no formado Y-m-d
+     * @return integer
+     */
+    public function differenceDateTime($dateTime = null) {
+        if (!empty($dateTime)) {
+            $this->setDateTime($dateTime, true);
+        }
+        $this->dateTimeInterval = $interval = $this->dateTime->diff($this->dateTimeDiff);
+        return $interval;
+    }
+    
+    public function toSeconds(\DateInterval $objDateTimeInterval) {
+        
+        echo '<pre>';
+        print_r($objDateTimeInterval->format('%s'));
+        exit;
+        $tmpDateTime = new \DateTime($objDateTimeInterval);
+        return $tmpDateTime->format('%s');
     }
 
     /**
