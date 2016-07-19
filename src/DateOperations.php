@@ -106,7 +106,7 @@ class DateOperations {
         } else if (preg_match('/^(0[1-9]|[12][0-9]|3[01])[\-\/.](0[1-9]|1[012])[\-\/.](19|20)\d\d$/', $return['dateFormated'])) {
             $return['format'] = 'd-m-Y';
         } else {
-            throw new \Exception('Necessário usilizar data nos formatos ddmmYYYY ou YYYYmmdd e separadores podendo ser ".", "-", "/", "_" sem as aspas');
+            throw new \Exception('Necessário utilizar data nos formatos ddmmYYYY ou YYYYmmdd e separadores podendo ser ".", "-", "/", "_" sem as aspas');
         }
         return $return;
     }
@@ -194,12 +194,8 @@ class DateOperations {
     }
     
     public function toSeconds(\DateInterval $objDateTimeInterval) {
-        
-        echo '<pre>';
-        print_r($objDateTimeInterval->format('%s'));
-        exit;
         $tmpDateTime = new \DateTime($objDateTimeInterval);
-        return $tmpDateTime->format('%s');
+        return strtotime($tmpDateTime->format('%Y-%m-%d %H:%i:%s'));
     }
 
     /**
