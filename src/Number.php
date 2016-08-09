@@ -63,7 +63,7 @@ class Number {
      * @param int $precision
      * @return string
      */
-    public static function byteFormat($bytes, $unit = "B", $precision = 2) {
+    public static function byteFormat($bytes, $unit = "B", $precision = 2, $returnType = 'string') {
         $kilobyte = 1024;
         $megabyte = $kilobyte * 1024;
         $gigabyte = $megabyte * 1024;
@@ -81,29 +81,53 @@ class Number {
             $value = $bytes;
         }
 
-        if (($value >= 0) && ($value < $kilobyte)) {
-            return $value . ' B';
-        } elseif (($value >= $kilobyte) && ($value < $megabyte)) {
-            return round($value / $kilobyte, $precision) . ' KB';
-        } elseif (($value >= $megabyte) && ($value < $gigabyte)) {
-            return round($value / $megabyte, $precision) . ' MB';
-        } elseif (($value >= $gigabyte) && ($value < $terabyte)) {
-            return round($value / $gigabyte, $precision) . ' GB';
-        } elseif ($value >= $terabyte) {
-            return round($value / $terabyte, $precision) . ' TB';
-        } elseif ($value >= $petabyte) {
-            return round($value / $petabyte, $precision) . ' PB';
-        } elseif ($value >= $exabyte) {
-            return round($value / $exabyte, $precision) . ' EB';
-        } elseif ($value >= $zettabyte) {
-            return round($value / $zettabyte, $precision) . ' ZB';
-        } elseif ($value >= $yottabyte) {
-            return round($value / $yottabyte, $precision) . ' YB';
+        if (strtolower($returnType) == 'string') {
+            if (($value >= 0) && ($value < $kilobyte)) {
+                return $value . ' B';
+            } elseif (($value >= $kilobyte) && ($value < $megabyte)) {
+                return round($value / $kilobyte, $precision) . ' KB';
+            } elseif (($value >= $megabyte) && ($value < $gigabyte)) {
+                return round($value / $megabyte, $precision) . ' MB';
+            } elseif (($value >= $gigabyte) && ($value < $terabyte)) {
+                return round($value / $gigabyte, $precision) . ' GB';
+            } elseif ($value >= $terabyte) {
+                return round($value / $terabyte, $precision) . ' TB';
+            } elseif ($value >= $petabyte) {
+                return round($value / $petabyte, $precision) . ' PB';
+            } elseif ($value >= $exabyte) {
+                return round($value / $exabyte, $precision) . ' EB';
+            } elseif ($value >= $zettabyte) {
+                return round($value / $zettabyte, $precision) . ' ZB';
+            } elseif ($value >= $yottabyte) {
+                return round($value / $yottabyte, $precision) . ' YB';
+            } else {
+                return $value . ' B';
+            }
         } else {
-            return $value . ' B';
+            if (($value >= 0) && ($value < $kilobyte)) {
+                return Array('value' => $value, 'format' => 'B');
+            } elseif (($value >= $kilobyte) && ($value < $megabyte)) {
+                return Array('value' => round($value / $kilobyte, $precision), 'format' => 'KB');
+            } elseif (($value >= $megabyte) && ($value < $gigabyte)) {
+                return Array('value' => round($value / $megabyte, $precision), 'format' => 'MB');
+            } elseif (($value >= $gigabyte) && ($value < $terabyte)) {
+                return Array('value' => round($value / $gigabyte, $precision), 'format' => 'GB');
+            } elseif ($value >= $terabyte) {
+                return Array('value' => round($value / $terabyte, $precision), 'format' => 'TB');
+            } elseif ($value >= $petabyte) {
+                return Array('value' => round($value / $petabyte, $precision), 'format' => 'PB');
+            } elseif ($value >= $exabyte) {
+                return Array('value' => round($value / $exabyte, $precision), 'format' => 'EB');
+            } elseif ($value >= $zettabyte) {
+                return Array('value' => round($value / $zettabyte, $precision), 'format' => 'ZB');
+            } elseif ($value >= $yottabyte) {
+                return Array('value' => round($value / $yottabyte, $precision), 'format' => 'YB');
+            } else {
+                return Array('value' => $value, 'format' => 'B');
+            }
         }
     }
-    
+
     /**
      * COnverte numero de definição de tamanho computacional
      * @param integer $bytes
@@ -129,7 +153,7 @@ class Number {
         } else {
             $value = $bytes;
         }
-        
+
         switch ($unitDest) {
             case 'B':
                 $return = $value;
