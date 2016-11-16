@@ -9,12 +9,13 @@ namespace Cityware\Format;
  */
 class DateOperations {
 
-    private $dateTime = null, $dateTimeDiff = null, $dateTimeInterval = null;
-
-    public function __construct() {
-        //$this->dateTime = new \DateTime();
-        //$this->dateTimeDiff = new \DateTime();
-    }
+    private $dateTime = null;
+    private $dateTimeDiff = null;
+    private $dateTimeInterval = null;
+    private $dateFormat = 'Y-m-d';
+    private $dateTimeFormat = 'Y-m-d H:i:s';
+    private $returnDateFormat = 'Y-m-d';
+    private $returnDateTimeFormat = 'Y-m-d H:i:s';
 
     /**
      * Função de envio de data baseado em string no formado Y-m-d
@@ -23,7 +24,7 @@ class DateOperations {
      */
     public function setDate($date, $diff = false) {
         $dateTemp = str_replace('/', '-', $date);
-        $formatedDate =  date('Y-m-d', strtotime($dateTemp));
+        $formatedDate =  date($this->dateFormat, strtotime($dateTemp));
         list($year, $month, $day) = explode("-", $formatedDate);
         if($diff){
             $this->dateTimeDiff = null;
@@ -44,7 +45,7 @@ class DateOperations {
      */
     public function setDateTime($date, $diff = false) {
         $dateTemp = str_replace('/', '-', $date);
-        $formatedDate =  date('Y-m-d H:i:s', strtotime($dateTemp));
+        $formatedDate =  date($this->dateTimeFormat, strtotime($dateTemp));
         if($diff){
             $this->dateTimeDiff = null;
             $this->dateTimeDiff = new \DateTime($formatedDate);
@@ -196,6 +197,22 @@ class DateOperations {
     public function toSeconds(\DateInterval $objDateTimeInterval) {
         $tmpDateTime = new \DateTime($objDateTimeInterval);
         return strtotime($tmpDateTime->format('%Y-%m-%d %H:%i:%s'));
+    }
+    
+    /**
+     * Função que retorna o dia numerico da semana da data definida
+     * @return integer
+     */
+    public function getWeekDayNum() {
+        return $this->dateTime->format('w');
+    }
+    
+    /**
+     * Função que retorna o dia por extenso (Inglês) da semana da data definida
+     * @return integer
+     */
+    public function getWeekDayName() {
+        return $this->dateTime->format('l');
     }
 
     /**
