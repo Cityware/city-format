@@ -40,6 +40,24 @@ final class Arrays {
         return $array;
     }
 
+    public static function convertObjectToArray($object) {
+        return json_decode(json_encode($object), true);
+    }
+
+    public static function convertArrayToObject($array) {
+        if (is_array($array)) {
+            /*
+             * Return array converted to object
+             * Using __FUNCTION__ (Magic constant)
+             * for recursive call
+             */
+            return (object) array_map(__FUNCTION__, $array);
+        } else {
+            // Return object
+            return $array;
+        }
+    }
+
     /**
      * Get a random value from an array.
      *
@@ -514,11 +532,11 @@ final class Arrays {
      * @return array
      */
     public static function clearEmpty($array) {
-        if (empty($array)){
+        if (empty($array)) {
             return array();
         }
         foreach ($array as $key => $val) {
-            if (!is_array($val)){
+            if (!is_array($val)) {
                 continue;
             }
             if (empty($val)) {
@@ -696,7 +714,7 @@ final class Arrays {
             $data = (array) $data;
         }
         // Recurse into arrays
-        if (is_array($data)){
+        if (is_array($data)) {
             foreach ($data as &$item) {
                 $item = self::fromXml($item, $callback, TRUE);
             }
