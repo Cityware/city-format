@@ -61,9 +61,9 @@ class DateOperations {
      * @param string $date
      * @return boolean
      */
-    public function validationDate($date) {
+    public function validationDate($date, $format = 'Y-m-d') {
         $validator = new \Zend\Validator\Date();
-        if (\DateTime::createFromFormat('Y-m-d', $date)) {
+        if (\DateTime::createFromFormat($format, $date)) {
             return $validator->isValid($date);
         } else {
             return false;
@@ -76,7 +76,7 @@ class DateOperations {
      * @return boolean
      */
     public function validationTime($time) {
-        return preg_match('#^([01]?[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$#', $time);
+        return (preg_match('#^([01]?[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$#', $time)) ? true : false;
     }
 
     /**
@@ -86,11 +86,24 @@ class DateOperations {
      */
     public function validationDateTime($dateTime) {
         $return = [];
+        
+        list($date, $time) = explode(" ", $dateTime);
+        
+        $dateFormat = str_replace(['/', '-', '.'], '-', $date);
+        
+        if(preg_match('/^([0-9]{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/', $dateFormat)){
+            $format = 'Y-m-d';
+        } else if(preg_match('/^([0-9]{4})-(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])$/', $dateFormat)) {
+            $format = 'Y-d-m';
+        } else if(preg_match('/^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-([0-9]{4})$/', $dateFormat)) {
+            $format = 'd-m-Y';
+        } else if(preg_match('/^(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])-([0-9]{4})$/', $dateFormat)) {
+            $format = 'm-d-Y';
+        } else {
+            $format = 'Y-m-d';
+        }
 
-        $time = $this->setDateTime($dateTime)->format("H:i:s");
-        $date = $this->setDateTime($dateTime)->format("Y-m-d");
-
-        $return['date'] = $this->validationDate($date);
+        $return['date'] = $this->validationDate($date, $format);
         $return['time'] = $this->validationTime($time);
 
         if ($return['date'] and $return['time']) {
