@@ -59,15 +59,12 @@ class DateOperations {
     /**
      * Função de validação de data
      * @param string $date
+     * @param string $format
      * @return boolean
      */
-    public function validationDate($date, $format = 'Y-m-d') {
-        $validator = new \Zend\Validator\Date();
-        if (\DateTime::createFromFormat($format, $date)) {
-            return $validator->isValid($date);
-        } else {
-            return false;
-        }
+    public function validateDate($date, $format = 'Y-m-d') {
+        $d = \DateTime::createFromFormat($format, $date);
+        return $d && $d->format($format) == $date;
     }
 
     /**
@@ -75,7 +72,7 @@ class DateOperations {
      * @param string $time
      * @return boolean
      */
-    public function validationTime($time) {
+    public function validateTime($time) {
         return (preg_match('#^([01]?[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$#', $time)) ? true : false;
     }
 
@@ -84,27 +81,33 @@ class DateOperations {
      * @param string $dateTime
      * @return array
      */
-    public function validationDateTime($dateTime) {
+    public function validateDateTime($dateTime) {
         $return = [];
-        
-        list($date, $time) = explode(" ", $dateTime);
-        
-        $dateFormat = str_replace(['/', '-', '.'], '-', $date);
-        
-        if(preg_match('/^([0-9]{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/', $dateFormat)){
-            $format = 'Y-m-d';
-        } else if(preg_match('/^([0-9]{4})-(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])$/', $dateFormat)) {
-            $format = 'Y-d-m';
-        } else if(preg_match('/^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-([0-9]{4})$/', $dateFormat)) {
-            $format = 'd-m-Y';
-        } else if(preg_match('/^(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])-([0-9]{4})$/', $dateFormat)) {
-            $format = 'm-d-Y';
-        } else {
-            $format = 'Y-m-d';
-        }
 
-        $return['date'] = $this->validationDate($date, $format);
-        $return['time'] = $this->validationTime($time);
+        if (!empty($dateTime)) {
+
+            $escapedDateTime = str_replace(['  ', '   ', '    '], ' ', $dateTime);
+
+            list($date, $time) = explode(" ", $escapedDateTime);
+
+            $dateFormat = str_replace(['/', '-', '.'], '-', $date);
+
+            if (preg_match('/^([0-9]{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/', $dateFormat)) {
+                $format = 'Y-m-d';
+            } else if (preg_match('/^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-([0-9]{4})$/', $dateFormat)) {
+                $format = 'd-m-Y';
+            } else if (preg_match('/^(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])-([0-9]{4})$/', $dateFormat)) {
+                $format = 'm-d-Y';
+            } else {
+                $format = null;
+            }
+
+            $return['date'] = $this->validateDate($dateFormat, $format);
+            $return['time'] = $this->validateTime($time);
+        } else {
+            $return['date'] = false;
+            $return['time'] = false;
+        }
 
         if ($return['date'] and $return['time']) {
             $return['datetime'] = true;
