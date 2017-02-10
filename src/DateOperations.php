@@ -24,9 +24,9 @@ class DateOperations {
      */
     public function setDate($date, $diff = false) {
         $dateTemp = str_replace('/', '-', $date);
-        $formatedDate =  date($this->dateFormat, strtotime($dateTemp));
+        $formatedDate = date($this->dateFormat, strtotime($dateTemp));
         list($year, $month, $day) = explode("-", $formatedDate);
-        if($diff){
+        if ($diff) {
             $this->dateTimeDiff = null;
             $this->dateTimeDiff = new \DateTime();
             $this->dateTimeDiff->setDate($year, $month, $day);
@@ -37,7 +37,7 @@ class DateOperations {
         }
         return $this;
     }
-    
+
     /**
      * Função de envio de data baseado em string no formado Y-m-d
      * @param string $date
@@ -45,8 +45,8 @@ class DateOperations {
      */
     public function setDateTime($date, $diff = false) {
         $dateTemp = str_replace('/', '-', $date);
-        $formatedDate =  date($this->dateTimeFormat, strtotime($dateTemp));
-        if($diff){
+        $formatedDate = date($this->dateTimeFormat, strtotime($dateTemp));
+        if ($diff) {
             $this->dateTimeDiff = null;
             $this->dateTimeDiff = new \DateTime($formatedDate);
         } else {
@@ -55,27 +55,75 @@ class DateOperations {
         }
         return $this;
     }
-    
+
     /**
-     * 
-     * @return type
+     * Função de validação de data
+     * @param string $date
+     * @return boolean
+     */
+    public function validationDate($date) {
+        $validator = new \Zend\Validator\Date();
+        if (\DateTime::createFromFormat('Y-m-d', $date)) {
+            return $validator->isValid($date);
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Função de validação de hora
+     * @param string $time
+     * @return boolean
+     */
+    public function validationTime($time) {
+        return preg_match('#^([01]?[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$#', $time);
+    }
+
+    /**
+     * Função de validação de data e hora
+     * @param string $dateTime
+     * @return array
+     */
+    public function validationDateTime($dateTime) {
+        $return = [];
+
+        $time = $this->setDateTime($dateTime)->format("H:i:s");
+        $date = $this->setDateTime($dateTime)->format("Y-m-d");
+
+        $return['date'] = $this->validationDate($date);
+        $return['time'] = $this->validationTime($time);
+
+        if ($return['date'] and $return['time']) {
+            $return['datetime'] = true;
+        } else {
+            $return['datetime'] = false;
+        }
+
+        return $return;
+    }
+
+    /**
+     * Retorna informações detalhadas da data informada
+     * @return array
      */
     public function parseDate() {
         return \date_parse($this->format());
     }
-    
+
     /**
+     * Altera o timestamp com modificados textual
+     * Ex:. +1 month
      * 
      * @param type $modify
      * @return type
      */
     public function dateModify($modify) {
-        $modified = (array)$this->dateTime->modify($modify);
+        $modified = (array) $this->dateTime->modify($modify);
         $date = explode(' ', $modified['date']);
-        
+
         return $this->setDate($date[0])->parseDate();
     }
-    
+
     /**
      * Pega o primeiro dia do mês corrente
      * @return \Cityware\Format\DateOperations
@@ -84,7 +132,7 @@ class DateOperations {
         $this->dateTime->modify('first day of this month');
         return $this;
     }
-    
+
     /**
      * Pega o ultimo dia do mês corrente
      * @return \Cityware\Format\DateOperations
@@ -149,7 +197,7 @@ class DateOperations {
      */
     public function sum($num, $type = 'd') {
         $typeSum = $this->converType($type);
-        $typeSumString = ($num > 1)? \Cityware\Format\Inflector::pluralize($typeSum) : $typeSum;
+        $typeSumString = ($num > 1) ? \Cityware\Format\Inflector::pluralize($typeSum) : $typeSum;
         $this->dateTime->add(date_interval_create_from_date_string($num . ' ' . $typeSumString));
         return $this;
     }
@@ -179,8 +227,7 @@ class DateOperations {
         $interval = (array) $this->dateTime->diff($this->dateTimeDiff);
         return $interval['days'];
     }
-    
-    
+
     /**
      * Função de calculo de diferença entre datas
      * @param string $dateTime Data baseado em string no formado Y-m-d
@@ -193,12 +240,12 @@ class DateOperations {
         $this->dateTimeInterval = $interval = $this->dateTime->diff($this->dateTimeDiff);
         return $interval;
     }
-    
+
     public function toSeconds(\DateInterval $objDateTimeInterval) {
         $tmpDateTime = new \DateTime($objDateTimeInterval);
         return strtotime($tmpDateTime->format('%Y-%m-%d %H:%i:%s'));
     }
-    
+
     /**
      * Função que retorna o dia numerico da semana da data definida
      * @return integer
@@ -206,7 +253,7 @@ class DateOperations {
     public function getWeekDayNum() {
         return $this->dateTime->format('w');
     }
-    
+
     /**
      * Função que retorna o dia por extenso (Inglês) da semana da data definida
      * @return integer
@@ -222,7 +269,7 @@ class DateOperations {
     public function render($format = 'Y-m-d') {
         echo $this->dateTime->format($format);
     }
-    
+
     /**
      * Função de formatação do resultado
      * @param string $format
