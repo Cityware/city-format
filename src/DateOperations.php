@@ -88,22 +88,30 @@ class DateOperations {
 
             $escapedDateTime = str_replace(['  ', '   ', '    '], ' ', $dateTime);
 
-            list($date, $time) = explode(" ", $escapedDateTime);
+            $aDateTime = explode(" ", $escapedDateTime);
 
-            $dateFormat = str_replace(['/', '-', '.'], '-', $date);
+            if (count($aDateTime) > 1) {
+                $date = $aDateTime[0];
+                $time = $aDateTime[1];
 
-            if (preg_match('/^([0-9]{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/', $dateFormat)) {
-                $format = 'Y-m-d';
-            } else if (preg_match('/^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-([0-9]{4})$/', $dateFormat)) {
-                $format = 'd-m-Y';
-            } else if (preg_match('/^(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])-([0-9]{4})$/', $dateFormat)) {
-                $format = 'm-d-Y';
+                $dateFormat = str_replace(['/', '-', '.'], '-', $date);
+
+                if (preg_match('/^([0-9]{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/', $dateFormat)) {
+                    $format = 'Y-m-d';
+                } else if (preg_match('/^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-([0-9]{4})$/', $dateFormat)) {
+                    $format = 'd-m-Y';
+                } else if (preg_match('/^(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])-([0-9]{4})$/', $dateFormat)) {
+                    $format = 'm-d-Y';
+                } else {
+                    $format = null;
+                }
+
+                $return['date'] = $this->validateDate($dateFormat, $format);
+                $return['time'] = $this->validateTime($time);
             } else {
-                $format = null;
+                $return['date'] = false;
+                $return['time'] = false;
             }
-
-            $return['date'] = $this->validateDate($dateFormat, $format);
-            $return['time'] = $this->validateTime($time);
         } else {
             $return['date'] = false;
             $return['time'] = false;
